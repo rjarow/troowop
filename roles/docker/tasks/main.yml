@@ -24,6 +24,6 @@
       append: yes
     when: docker_user is defined
 
-  - name: Create the default docker network for doowop
+  - name: Create the default docker network for troowop
     docker_network:
       name: "{{ docker_network_name }}"

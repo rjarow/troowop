@@ -1,0 +1,56 @@
+- name: Get UID of {{ docker_user }}
+  shell: id -u "{{ docker_user }}"
+  register: docker_user_id
+
+- name: Create Traefik config directory
+  file:
+    path: "{{ configdir }}/traefik"
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: 0775
+    state: directory
+    recurse: yes
+
+- name: Touch Traefik config file
+  file:
+    path: "{{ configdir }}/traefik/traefik.toml"
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: 0775
+    state: touch
+
+- name: Copy in Traefik config file
+  template:
+    src: templates/traefik.j2
+    dest: "{{ configdir }}/traefik/traefik.toml"
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: 0644
+
+
+- name: Touch Traefik ACME file
+  file:
+    path: "{{ configdir }}/traefik/acme.json"
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: 0600
+    state: touch
+
+- name: Create traefik container
+  docker_container:
+    name: traefik
+    image: traefik
+    state: started
+    restart_policy: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "{{ configdir }}/traefik/traefik.toml:/traefik.toml"
+      - "{{ configdir }}/traefik/acme.json:/acme.json"
+    # user: "{{ docker_user_id.stdout }}" # nope
+    published_ports:
+      - 80:80
+      - 443:443
+    labels:
+    networks:
+      - name: "{{ docker_network_name }}"
+    purge_networks: yes

@@ -17,6 +17,7 @@
     - { role: common, tags: [ "common" ] } # install pre-requisites / upgrade apt
     - { role: docker, tags: [ "docker" ] } # docker install
     - { role: ufw, tags: [ "ufw" ] } # firewall install
+    - { role: traefik, tags: [ "traefik" ] } # traefik reverse proxy deploy
 
 ### Optional Tools ###
     - { role: dry, tags: [ "dry" ] } # docker cli management tool

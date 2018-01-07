@@ -24,10 +24,10 @@ sitedir: /sites
 ssh_port: 22
 
 ### docker user, this user will be created and used to run the docker containers as.
-docker_user: runuser
+docker_user: rj
 
-### docker network the proxy and doowop containers will live on.
-docker_network_name: doowop
+### docker network the proxy and troowop containers will live on.
+docker_network_name: troowop
 
 ### portainer port ### - When Portainer is installed it'll be accessible via this port
 ### Portainer is a web frontend for docker, handy for managing Docker Containers ###
